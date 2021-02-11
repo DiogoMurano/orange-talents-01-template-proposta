@@ -11,4 +11,6 @@ public interface ProposalRepository extends CrudRepository<Proposal, Long> {
 
     Optional<Proposal> findByDocument(String document);
 
+    boolean existsByDocument(String document);
+
 }

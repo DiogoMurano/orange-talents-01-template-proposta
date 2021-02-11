@@ -47,4 +47,8 @@ public class Proposal {
     public Long getId() {
         return id;
     }
+
+    public String getDocument() {
+        return document;
+    }
 }

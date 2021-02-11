@@ -1,6 +1,7 @@
 package br.com.zup.proposal.controller;
 
 import br.com.zup.proposal.controller.request.ProposalRequest;
+import br.com.zup.proposal.controller.response.ErrorResponse;
 import br.com.zup.proposal.model.Proposal;
 import br.com.zup.proposal.repository.ProposalRepository;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,12 @@ public class ProposalController {
                                                UriComponentsBuilder builder) {
 
         Proposal proposal = request.toModel();
+
+        if (proposalRepository.existsByDocument(proposal.getDocument())) {
+            return ResponseEntity.unprocessableEntity()
+                    .body(new ErrorResponse("There is already a proposal for that document."));
+        }
+
         proposalRepository.save(proposal);
 
         URI location = builder.path("/api/v1/proposal/{id}").buildAndExpand(proposal.getId()).toUri();
