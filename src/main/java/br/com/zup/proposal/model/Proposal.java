@@ -33,6 +33,10 @@ public class Proposal {
     @Positive
     private BigDecimal salary;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private ProposalStatus status = ProposalStatus.NOT_ELIGIBLE;
+
     public Proposal(String document, String email, String name, Address address, BigDecimal salary) {
         this.document = document;
         this.email = email;
@@ -50,5 +54,17 @@ public class Proposal {
 
     public String getDocument() {
         return document;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ProposalStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProposalStatus status) {
+        this.status = status;
     }
 }

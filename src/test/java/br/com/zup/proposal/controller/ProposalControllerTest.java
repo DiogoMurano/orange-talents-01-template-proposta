@@ -3,6 +3,7 @@ package br.com.zup.proposal.controller;
 import br.com.zup.proposal.controller.request.AddressRequest;
 import br.com.zup.proposal.controller.request.ProposalRequest;
 import br.com.zup.proposal.model.Proposal;
+import br.com.zup.proposal.model.ProposalStatus;
 import br.com.zup.proposal.repository.ProposalRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -59,7 +60,11 @@ class ProposalControllerTest {
 
         assertAll(() -> {
             assertTrue(optional.isPresent());
-            assertNotNull(optional.get());
+
+            Proposal proposal = optional.get();
+            assertNotNull(proposal);
+
+            assertEquals(proposal.getStatus(), ProposalStatus.ELIGIBLE);
         });
     }
 
@@ -105,6 +110,37 @@ class ProposalControllerTest {
                 .contentType(APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void restrictionCreateAProposal() throws Exception {
+        ProposalRequest request = new ProposalRequest("313.981.590-50",
+                "aanthonymatheusoliveira@achievecidadenova.com.br",
+                "Anthony Matheus Oliveira",
+                new AddressRequest("58732-970",
+                        "Rua Valdeci Sales 285",
+                        "Centro",
+                        "Apt 271",
+                        "Areia de Baraúnas",
+                        "PB"),
+                BigDecimal.valueOf(15000));
+
+        mockMvc.perform(post("/api/v1/proposal")
+                .contentType(APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        Optional<Proposal> optional = repository.findByDocument("313.981.590-50");
+
+        assertAll(() -> {
+
+            assertTrue(optional.isPresent());
+
+            Proposal proposal = optional.get();
+            assertNotNull(proposal);
+
+            assertEquals(proposal.getStatus(), ProposalStatus.NOT_ELIGIBLE);
+        });
     }
 
 }
