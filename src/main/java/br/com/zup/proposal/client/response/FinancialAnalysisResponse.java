@@ -1,6 +1,6 @@
 package br.com.zup.proposal.client.response;
 
-import br.com.zup.proposal.model.ProposalStatus;
+import br.com.zup.proposal.model.enums.ProposalStatus;
 
 public class FinancialAnalysisResponse {
 

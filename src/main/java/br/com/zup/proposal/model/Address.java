@@ -32,6 +32,31 @@ public class Address {
         this.state = state;
     }
 
+    @Deprecated
     public Address() {
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public String getComplement() {
+        return complement;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getState() {
+        return state;
     }
 }

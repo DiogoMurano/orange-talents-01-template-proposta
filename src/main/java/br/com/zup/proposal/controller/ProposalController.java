@@ -1,65 +1,56 @@
 package br.com.zup.proposal.controller;
 
-import br.com.zup.proposal.client.FinancialAnalysisClient;
-import br.com.zup.proposal.client.request.FinancialAnalysisRequest;
-import br.com.zup.proposal.client.response.FinancialAnalysisResponse;
-import br.com.zup.proposal.controller.request.ProposalRequest;
-import br.com.zup.proposal.controller.response.ErrorResponse;
+import br.com.zup.proposal.controller.response.CardResponse;
+import br.com.zup.proposal.controller.response.ProposalResponse;
+import br.com.zup.proposal.model.Card;
 import br.com.zup.proposal.model.Proposal;
 import br.com.zup.proposal.repository.ProposalRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import feign.FeignException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
-import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/proposal")
 public class ProposalController {
 
     private final ProposalRepository proposalRepository;
-    private final FinancialAnalysisClient analysisClient;
 
-    private final Gson gson;
-
-    public ProposalController(ProposalRepository proposalRepository, FinancialAnalysisClient analysisClient, Gson gson) {
+    @Autowired
+    public ProposalController(ProposalRepository proposalRepository) {
         this.proposalRepository = proposalRepository;
-        this.analysisClient = analysisClient;
-        this.gson = gson;
     }
 
-    @PostMapping
-    public ResponseEntity<?> createNewProposal(@RequestBody @Valid ProposalRequest request,
-                                               UriComponentsBuilder builder) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ProposalResponse> findById(@PathVariable UUID id) {
+        Proposal proposal = proposalRepository.findByExternalId(id).orElseThrow(() ->
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "Proposal not found."));
+        Card card = proposal.getCard();
 
-        Proposal proposal = request.toModel();
+        ProposalResponse.ProposalResponseBuilder builder = ProposalResponse.builder()
+                .externalId(proposal.getExternalId())
+                .document(proposal.getDocument())
+                .email(proposal.getEmail())
+                .name(proposal.getName())
+                .salary(proposal.getSalary())
+                .status(proposal.getStatus())
+                .cardStatus(proposal.getCardStatus());
 
-        if (proposalRepository.existsByDocument(proposal.getDocument())) {
-            return ResponseEntity.unprocessableEntity()
-                    .body(new ErrorResponse("There is already a proposal for that document."));
+        if (card != null) {
+            builder.card(CardResponse.builder()
+                    .cardNumber(card.getNumber())
+                    .createdAt(card.getCreatedAt())
+                    .build());
         }
 
-        FinancialAnalysisResponse response;
-
-        try {
-            response = analysisClient
-                    .consult(new FinancialAnalysisRequest(proposal.getDocument(), proposal.getName(), proposal.getId()));
-        } catch (FeignException.UnprocessableEntity e) {
-            response = gson.fromJson(e.contentUTF8(), FinancialAnalysisResponse.class);
-        }
-
-        proposal.setStatus(response.getResultadoSolicitacao().getStatus());
-        proposalRepository.save(proposal);
-
-        URI location = builder.path("/api/v1/proposal/{id}").buildAndExpand(proposal.getId()).toUri();
-        return ResponseEntity.created(location).build();
+        ProposalResponse response = builder.build();
+        return ResponseEntity.ok(response);
     }
 
 }
