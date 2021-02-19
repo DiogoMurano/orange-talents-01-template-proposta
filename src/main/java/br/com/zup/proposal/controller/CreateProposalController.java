@@ -1,18 +1,16 @@
 package br.com.zup.proposal.controller;
 
-import br.com.zup.proposal.client.CardCreationClient;
 import br.com.zup.proposal.client.FinancialAnalysisClient;
-import br.com.zup.proposal.client.request.CreateCardRequest;
 import br.com.zup.proposal.client.request.FinancialAnalysisRequest;
 import br.com.zup.proposal.client.response.FinancialAnalysisResponse;
 import br.com.zup.proposal.controller.request.ProposalRequest;
 import br.com.zup.proposal.controller.response.ErrorResponse;
 import br.com.zup.proposal.model.Proposal;
-import br.com.zup.proposal.model.enums.ProposalStatus;
 import br.com.zup.proposal.repository.ProposalRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,16 +28,16 @@ public class CreateProposalController {
 
     private final ProposalRepository proposalRepository;
     private final FinancialAnalysisClient analysisClient;
-    private final CardCreationClient cardClient;
 
     private final Gson gson;
 
+    private static final Logger logger = LoggerFactory.getLogger(ProposalController.class);
+
     @Autowired
     public CreateProposalController(ProposalRepository proposalRepository,
-                                    FinancialAnalysisClient analysisClient, CardCreationClient cardClient, Gson gson) {
+                                    FinancialAnalysisClient analysisClient, Gson gson) {
         this.proposalRepository = proposalRepository;
         this.analysisClient = analysisClient;
-        this.cardClient = cardClient;
 
         this.gson = gson;
     }
@@ -49,7 +47,6 @@ public class CreateProposalController {
                                                UriComponentsBuilder builder) {
 
         Proposal proposal = request.toModel();
-
         if (proposalRepository.existsByDocument(proposal.getDocument())) {
             return ResponseEntity.unprocessableEntity()
                     .body(new ErrorResponse("There is already a proposal for that document."));
@@ -67,9 +64,7 @@ public class CreateProposalController {
         proposal.setStatus(response.getResultadoSolicitacao().getStatus());
         proposalRepository.save(proposal);
 
-        if (proposal.getStatus() == ProposalStatus.ELIGIBLE) {
-            cardClient.create(new CreateCardRequest(proposal.getDocument(), proposal.getName(), proposal.getId()));
-        }
+        logger.info("Proposal " + proposal.getExternalId().toString() + " successfully created");
 
         URI location = builder.path("/api/v1/proposal/{id}").buildAndExpand(proposal.getExternalId().toString()).toUri();
         return ResponseEntity.created(location).build();

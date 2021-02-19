@@ -1,5 +1,6 @@
 package br.com.zup.proposal.client;
 
+import br.com.zup.proposal.client.request.CreateCardRequest;
 import br.com.zup.proposal.client.response.NewCardResponse;
 import br.com.zup.proposal.model.Card;
 import br.com.zup.proposal.model.Proposal;
@@ -40,8 +41,9 @@ public class ConsultCardTask {
 
         proposals.forEach(proposal -> {
             try {
-                NewCardResponse consult = cardCreationClient.consult(proposal.getId().toString());
-                Card card = new Card(consult.getId(), consult.getEmitidoEm(), proposal);
+                NewCardResponse consult = cardCreationClient.create(new CreateCardRequest(proposal.getDocument(),
+                        proposal.getName(), proposal.getExternalId()));
+                Card card = new Card(consult.getId(), consult.getCreatedAt(), proposal);
                 cardRepository.save(card);
 
                 proposal.associateCard(card);
@@ -51,7 +53,6 @@ public class ConsultCardTask {
                         " associated with proposal " + proposal.getExternalId().toString());
             } catch (FeignException.InternalServerError e) {
                 logger.info(MessageFormat.format("Failed to query card to proposal {0}", proposal.getId()));
-                e.printStackTrace();
             }
         });
     }

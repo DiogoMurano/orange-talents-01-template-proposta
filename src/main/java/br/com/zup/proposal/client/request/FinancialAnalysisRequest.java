@@ -4,18 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FinancialAnalysisRequest {
 
-    @JsonProperty
-    private final String documento;
+    @JsonProperty("documento")
+    private final String document;
 
-    @JsonProperty
-    private final String nome;
+    @JsonProperty("nome")
+    private final String name;
 
-    @JsonProperty
-    private final Long idProposta;
+    @JsonProperty("idProposta")
+    private final Long idProposal;
 
-    public FinancialAnalysisRequest(String documento, String nome, Long idProposta) {
-        this.documento = documento;
-        this.nome = nome;
-        this.idProposta = idProposta;
+    public FinancialAnalysisRequest(String document, String name, Long idProposal) {
+        this.document = document;
+        this.name = name;
+        this.idProposal = idProposal;
     }
 }
