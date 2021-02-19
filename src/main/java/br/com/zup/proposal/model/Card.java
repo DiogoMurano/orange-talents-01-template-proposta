@@ -2,6 +2,7 @@ package br.com.zup.proposal.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +15,7 @@ public class Card {
     @NotBlank
     private String number;
 
-    @NotBlank
+    @NotNull
     private LocalDateTime createdAt;
 
     @OneToOne
