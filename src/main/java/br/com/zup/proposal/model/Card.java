@@ -65,4 +65,8 @@ public class Card {
     public Set<Biometry> getBiometrics() {
         return biometrics;
     }
+
+    public String getBlinkCardNumber() {
+        return "****.****.****." + getNumber().substring(getNumber().length() - 4);
+    }
 }

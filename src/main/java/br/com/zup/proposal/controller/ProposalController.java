@@ -35,16 +35,16 @@ public class ProposalController {
 
         ProposalResponse.ProposalResponseBuilder builder = ProposalResponse.builder()
                 .externalId(proposal.getExternalId())
+                .createdAt(proposal.getCreatedAt())
                 .document(proposal.getDocument())
                 .email(proposal.getEmail())
                 .name(proposal.getName())
                 .salary(proposal.getSalary())
-                .status(proposal.getStatus())
-                .cardStatus(proposal.getCardStatus());
+                .status(proposal.getStatus());
 
         if (card != null) {
             builder.card(CardResponse.builder()
-                    .cardNumber(card.getNumber())
+                    .cardNumber(card.getBlinkCardNumber())
                     .createdAt(card.getCreatedAt())
                     .build());
         }

@@ -1,6 +1,5 @@
 package br.com.zup.proposal.model;
 
-import br.com.zup.proposal.model.enums.CardStatus;
 import br.com.zup.proposal.model.enums.ProposalStatus;
 import br.com.zup.proposal.validation.Document;
 
@@ -10,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +21,9 @@ public class Proposal {
 
     @NotNull
     private final UUID externalId = UUID.randomUUID();
+
+    @NotNull
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @NotBlank
     @Document
@@ -47,10 +50,6 @@ public class Proposal {
     @OneToOne
     private Card card;
 
-    @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    private CardStatus cardStatus = CardStatus.UNCREATED;
-
     public Proposal(String document, String email, String name, Address address, BigDecimal salary) {
         this.document = document;
         this.email = email;
@@ -63,9 +62,9 @@ public class Proposal {
     public Proposal() {
     }
 
-    public void associateCard(@Valid Card card) {
+    public void attachCard(@Valid Card card) {
         this.card = card;
-        this.cardStatus = CardStatus.CREATED;
+        this.status = ProposalStatus.ELIGIBLE_WITH_ATTACHED_CARD;
     }
 
     public Long getId() {
@@ -74,6 +73,10 @@ public class Proposal {
 
     public UUID getExternalId() {
         return externalId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     public String getDocument() {
@@ -102,10 +105,6 @@ public class Proposal {
 
     public Card getCard() {
         return card;
-    }
-
-    public CardStatus getCardStatus() {
-        return cardStatus;
     }
 
     public void setStatus(ProposalStatus status) {
