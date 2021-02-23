@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,6 +44,7 @@ public class CreateProposalController {
     }
 
     @PostMapping
+    @Transactional
     public ResponseEntity<?> createNewProposal(@RequestBody @Valid ProposalRequest request,
                                                UriComponentsBuilder builder) {
 
@@ -56,7 +58,7 @@ public class CreateProposalController {
 
         try {
             response = analysisClient
-                    .consult(new FinancialAnalysisRequest(proposal.getDocument(), proposal.getName(), proposal.getId()));
+                    .consult(new FinancialAnalysisRequest(proposal.getDocument(), proposal.getName(), proposal.getExternalIdToString()));
         } catch (FeignException.UnprocessableEntity e) {
             response = gson.fromJson(e.contentUTF8(), FinancialAnalysisResponse.class);
         }
@@ -64,7 +66,7 @@ public class CreateProposalController {
         proposal.setStatus(response.getResultadoSolicitacao().getStatus());
         proposalRepository.save(proposal);
 
-        logger.info("Proposal " + proposal.getExternalId().toString() + " successfully created");
+        logger.info("Proposal {} successfully created", proposal.getExternalId().toString());
 
         URI location = builder.path("/api/v1/proposal/{id}").buildAndExpand(proposal.getExternalId().toString()).toUri();
         return ResponseEntity.created(location).build();

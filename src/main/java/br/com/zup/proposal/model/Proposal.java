@@ -67,6 +67,10 @@ public class Proposal {
         this.status = ProposalStatus.ELIGIBLE_WITH_ATTACHED_CARD;
     }
 
+    public String getExternalIdToString() {
+        return externalId.toString().replace("-", "");
+    }
+
     public Long getId() {
         return id;
     }

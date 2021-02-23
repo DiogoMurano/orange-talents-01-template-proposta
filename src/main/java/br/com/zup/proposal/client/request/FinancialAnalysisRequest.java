@@ -11,9 +11,9 @@ public class FinancialAnalysisRequest {
     private final String name;
 
     @JsonProperty("idProposta")
-    private final Long idProposal;
+    private final String idProposal;
 
-    public FinancialAnalysisRequest(String document, String name, Long idProposal) {
+    public FinancialAnalysisRequest(String document, String name, String idProposal) {
         this.document = document;
         this.name = name;
         this.idProposal = idProposal;

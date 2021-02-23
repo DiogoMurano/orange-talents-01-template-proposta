@@ -15,9 +15,9 @@ public class FinancialAnalysisResponse {
     private final Result resultadoSolicitacao;
 
     @JsonProperty
-    private final Long idProposta;
+    private final String idProposta;
 
-    public FinancialAnalysisResponse(String documento, String nome, Result resultadoSolicitacao, Long idProposta) {
+    public FinancialAnalysisResponse(String documento, String nome, Result resultadoSolicitacao, String idProposta) {
         this.documento = documento;
         this.nome = nome;
         this.resultadoSolicitacao = resultadoSolicitacao;
@@ -36,7 +36,7 @@ public class FinancialAnalysisResponse {
         return resultadoSolicitacao;
     }
 
-    public Long getIdProposta() {
+    public String getIdProposta() {
         return idProposta;
     }
 
