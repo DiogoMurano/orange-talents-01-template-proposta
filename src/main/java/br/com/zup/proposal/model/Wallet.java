@@ -1,9 +1,8 @@
 package br.com.zup.proposal.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import br.com.zup.proposal.model.enums.WalletType;
+
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,13 +25,18 @@ public class Wallet {
     @Email
     private String email;
 
-    @NotBlank
-    private String wallet;
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private WalletType type;
 
-    public Wallet(Card card, String email, String wallet) {
+    public Wallet(Card card, String email, WalletType type) {
         this.card = card;
         this.email = email;
-        this.wallet = wallet;
+        this.type = type;
+    }
+
+    @Deprecated
+    public Wallet() {
     }
 
     public Long getId() {
@@ -51,7 +55,7 @@ public class Wallet {
         return email;
     }
 
-    public String getWallet() {
-        return wallet;
+    public WalletType getType() {
+        return type;
     }
 }

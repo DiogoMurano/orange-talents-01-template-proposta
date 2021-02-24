@@ -1,9 +1,11 @@
 package br.com.zup.proposal.controller.request;
 
+import br.com.zup.proposal.model.enums.WalletType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class AssociateWalletRequest {
 
@@ -13,10 +15,10 @@ public class AssociateWalletRequest {
     private final String email;
 
     @JsonProperty
-    @NotBlank
-    private final String wallet;
+    @NotNull
+    private final WalletType wallet;
 
-    public AssociateWalletRequest(String email, String wallet) {
+    public AssociateWalletRequest(String email, WalletType wallet) {
         this.email = email;
         this.wallet = wallet;
     }
@@ -25,7 +27,7 @@ public class AssociateWalletRequest {
         return email;
     }
 
-    public String getWallet() {
+    public WalletType getWallet() {
         return wallet;
     }
 }

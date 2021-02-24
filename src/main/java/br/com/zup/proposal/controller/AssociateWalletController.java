@@ -43,12 +43,12 @@ public class AssociateWalletController {
             return ResponseEntity.unprocessableEntity().body(new ErrorResponse("This card is blocked."));
         }
 
-        if (walletRepository.existsByCardAndWallet(card, request.getWallet())) {
+        if (walletRepository.existsByCardAndType(card, request.getWallet())) {
             return ResponseEntity.unprocessableEntity().body(new ErrorResponse("Card already associated with this wallet."));
         }
 
         try {
-            cardClient.associate(card.getNumber(), new ClientAssociateWalletRequest(request.getEmail(), request.getWallet()));
+            cardClient.associate(card.getNumber(), new ClientAssociateWalletRequest(request.getEmail(), request.getWallet().toString()));
         } catch (FeignException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Failed to associate wallet.");
         }
