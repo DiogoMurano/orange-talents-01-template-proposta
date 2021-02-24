@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
 
-public class NewCardResponse {
+public class ClientNewCardResponse {
 
     @JsonProperty("id")
     private final String id;
@@ -12,7 +12,7 @@ public class NewCardResponse {
     @JsonProperty("emitidoEm")
     private final LocalDateTime createdAt;
 
-    public NewCardResponse(String id, LocalDateTime createdAt) {
+    public ClientNewCardResponse(String id, LocalDateTime createdAt) {
         this.id = id;
         this.createdAt = createdAt;
     }

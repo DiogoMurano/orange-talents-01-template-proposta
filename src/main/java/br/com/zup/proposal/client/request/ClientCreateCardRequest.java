@@ -2,7 +2,9 @@ package br.com.zup.proposal.client.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FinancialAnalysisRequest {
+import java.util.UUID;
+
+public class ClientCreateCardRequest {
 
     @JsonProperty("documento")
     private final String document;
@@ -13,9 +15,9 @@ public class FinancialAnalysisRequest {
     @JsonProperty("idProposta")
     private final String idProposal;
 
-    public FinancialAnalysisRequest(String document, String name, String idProposal) {
+    public ClientCreateCardRequest(String document, String name, UUID idProposal) {
         this.document = document;
         this.name = name;
-        this.idProposal = idProposal;
+        this.idProposal = idProposal.toString();
     }
 }

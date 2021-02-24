@@ -1,7 +1,7 @@
 package br.com.zup.proposal.controller;
 
 import br.com.zup.proposal.client.CardClient;
-import br.com.zup.proposal.client.request.NotifyCardRequest;
+import br.com.zup.proposal.client.request.ClientNotifyCardRequest;
 import br.com.zup.proposal.controller.request.TravelNotificationRequest;
 import br.com.zup.proposal.controller.response.ErrorResponse;
 import br.com.zup.proposal.model.Card;
@@ -55,7 +55,7 @@ public class TravelNotificationController {
         String userAgent = servletRequest.getHeader("User-Agent");
 
         try {
-            cardClient.notify(card.getNumber(), new NotifyCardRequest(request.getDestiny(), request.getFinishTravelDate()));
+            cardClient.notify(card.getNumber(), new ClientNotifyCardRequest(request.getDestiny(), request.getFinishTravelDate()));
         } catch (FeignException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "An error occurred while sending the notification.");
         }

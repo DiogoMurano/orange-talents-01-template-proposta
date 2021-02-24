@@ -1,7 +1,7 @@
 package br.com.zup.proposal.controller;
 
 import br.com.zup.proposal.client.CardClient;
-import br.com.zup.proposal.client.request.BlockCardRequest;
+import br.com.zup.proposal.client.request.ClientBlockCardRequest;
 import br.com.zup.proposal.controller.response.ErrorResponse;
 import br.com.zup.proposal.model.Block;
 import br.com.zup.proposal.model.Card;
@@ -58,7 +58,7 @@ public class BlockCardController {
         String userAgent = request.getHeader("User-Agent");
 
         try {
-            cardClient.block(card.getNumber(), new BlockCardRequest(APP_NAME));
+            cardClient.block(card.getNumber(), new ClientBlockCardRequest(APP_NAME));
         } catch (FeignException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "The card couldn't be blocked.");
         }

@@ -1,10 +1,12 @@
 package br.com.zup.proposal.client;
 
-import br.com.zup.proposal.client.request.BlockCardRequest;
-import br.com.zup.proposal.client.request.NotifyCardRequest;
-import br.com.zup.proposal.client.response.BlockCardResponse;
-import br.com.zup.proposal.client.response.NewCardResponse;
-import br.com.zup.proposal.client.response.NotifyCardResponse;
+import br.com.zup.proposal.client.request.ClientAssociateWalletRequest;
+import br.com.zup.proposal.client.request.ClientBlockCardRequest;
+import br.com.zup.proposal.client.request.ClientNotifyCardRequest;
+import br.com.zup.proposal.client.response.ClientAssociateWalletResponse;
+import br.com.zup.proposal.client.response.ClientBlockCardResponse;
+import br.com.zup.proposal.client.response.ClientNewCardResponse;
+import br.com.zup.proposal.client.response.ClientNotifyCardResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,13 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public interface CardClient {
 
     @GetMapping("/api/cartoes")
-    NewCardResponse consult(@RequestParam("idProposta") String id);
+    ClientNewCardResponse consult(@RequestParam("idProposta") String id);
 
     @PostMapping("/api/cartoes/{id}/bloqueios")
-    BlockCardResponse block(@PathVariable String id, @RequestBody BlockCardRequest request);
+    ClientBlockCardResponse block(@PathVariable String id, @RequestBody ClientBlockCardRequest request);
 
     @PostMapping("/api/cartoes/{id}/avisos")
-    NotifyCardResponse notify(@PathVariable String id, @RequestBody NotifyCardRequest request);
+    ClientNotifyCardResponse notify(@PathVariable String id, @RequestBody ClientNotifyCardRequest request);
+
+    @PostMapping("/api/cartoes/{id}/avisos")
+    ClientAssociateWalletResponse associate(@PathVariable String id, @RequestBody ClientAssociateWalletRequest request);
 
 
 }

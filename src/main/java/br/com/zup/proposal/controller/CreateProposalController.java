@@ -1,8 +1,8 @@
 package br.com.zup.proposal.controller;
 
 import br.com.zup.proposal.client.FinancialAnalysisClient;
-import br.com.zup.proposal.client.request.FinancialAnalysisRequest;
-import br.com.zup.proposal.client.response.FinancialAnalysisResponse;
+import br.com.zup.proposal.client.request.ClientFinancialAnalysisRequest;
+import br.com.zup.proposal.client.response.ClientFinancialAnalysisResponse;
 import br.com.zup.proposal.controller.request.ProposalRequest;
 import br.com.zup.proposal.controller.response.ErrorResponse;
 import br.com.zup.proposal.model.Proposal;
@@ -54,13 +54,13 @@ public class CreateProposalController {
                     .body(new ErrorResponse("There is already a proposal for that document."));
         }
 
-        FinancialAnalysisResponse response;
+        ClientFinancialAnalysisResponse response;
 
         try {
             response = analysisClient
-                    .consult(new FinancialAnalysisRequest(proposal.getDocument(), proposal.getName(), proposal.getExternalIdToString()));
+                    .consult(new ClientFinancialAnalysisRequest(proposal.getDocument(), proposal.getName(), proposal.getExternalIdToString()));
         } catch (FeignException.UnprocessableEntity e) {
-            response = gson.fromJson(e.contentUTF8(), FinancialAnalysisResponse.class);
+            response = gson.fromJson(e.contentUTF8(), ClientFinancialAnalysisResponse.class);
         }
 
         proposal.setStatus(response.getResultadoSolicitacao().getStatus());

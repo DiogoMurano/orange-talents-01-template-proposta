@@ -1,7 +1,7 @@
 package br.com.zup.proposal.scheduler;
 
 import br.com.zup.proposal.client.CardClient;
-import br.com.zup.proposal.client.response.NewCardResponse;
+import br.com.zup.proposal.client.response.ClientNewCardResponse;
 import br.com.zup.proposal.model.Card;
 import br.com.zup.proposal.model.Proposal;
 import br.com.zup.proposal.model.enums.ProposalStatus;
@@ -41,7 +41,7 @@ public class ConsultCardScheduler {
 
         for (Proposal proposal : proposals) {
             try {
-                NewCardResponse consult = cardClient.consult(proposal.getExternalIdToString());
+                ClientNewCardResponse consult = cardClient.consult(proposal.getExternalIdToString());
                 Card card = new Card(consult.getId(), consult.getCreatedAt(), proposal);
                 cardRepository.save(card);
 

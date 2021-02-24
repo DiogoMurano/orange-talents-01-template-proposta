@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
-public class NotifyCardRequest {
+public class ClientNotifyCardRequest {
 
     @JsonProperty("sistemaResponsavel")
     private final String destiny;
@@ -12,7 +12,7 @@ public class NotifyCardRequest {
     @JsonProperty("validoAte")
     private final LocalDate validate;
 
-    public NotifyCardRequest(String destiny, LocalDate validate) {
+    public ClientNotifyCardRequest(String destiny, LocalDate validate) {
         this.destiny = destiny;
         this.validate = validate;
     }

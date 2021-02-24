@@ -3,7 +3,7 @@ package br.com.zup.proposal.client.response;
 import br.com.zup.proposal.model.enums.ProposalStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FinancialAnalysisResponse {
+public class ClientFinancialAnalysisResponse {
 
     @JsonProperty
     private final String documento;
@@ -17,7 +17,7 @@ public class FinancialAnalysisResponse {
     @JsonProperty
     private final String idProposta;
 
-    public FinancialAnalysisResponse(String documento, String nome, Result resultadoSolicitacao, String idProposta) {
+    public ClientFinancialAnalysisResponse(String documento, String nome, Result resultadoSolicitacao, String idProposta) {
         this.documento = documento;
         this.nome = nome;
         this.resultadoSolicitacao = resultadoSolicitacao;
