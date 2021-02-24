@@ -1,6 +1,7 @@
 package br.com.zup.proposal.controller;
 
 import br.com.zup.proposal.controller.request.BiometryRequest;
+import br.com.zup.proposal.controller.response.ErrorResponse;
 import br.com.zup.proposal.model.Biometry;
 import br.com.zup.proposal.model.Card;
 import br.com.zup.proposal.repository.BiometryRepository;
@@ -35,6 +36,10 @@ public class CreateBiometryController {
 
         Card card = cardRepository.findByExternalId(id).orElseThrow(() ->
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "Card not found."));
+
+        if (card.isBlocked()) {
+            return ResponseEntity.unprocessableEntity().body(new ErrorResponse("This card is blocked."));
+        }
 
         Biometry biometry = request.toModel(card);
         biometryRepository.save(biometry);

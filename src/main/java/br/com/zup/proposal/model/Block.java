@@ -25,7 +25,7 @@ public class Block {
     @OneToOne
     private Card card;
 
-    public Block(@NotNull Requester requester, Card card) {
+    public Block(Requester requester, Card card) {
         this.requester = requester;
         this.card = card;
     }

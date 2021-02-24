@@ -34,8 +34,9 @@ public class Card {
     @OneToMany
     private final Set<Biometry> biometrics = Collections.emptySet();
 
-    @OneToOne
-    private Block block;
+    @NotNull
+    @OneToMany
+    private final Set<TravelNotification> notifications = Collections.emptySet();
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -75,12 +76,15 @@ public class Card {
         return biometrics;
     }
 
+    public Set<TravelNotification> getNotifications() {
+        return notifications;
+    }
+
     public String getBlinkCardNumber() {
         return "****.****.****." + getNumber().substring(getNumber().length() - 4);
     }
 
-    public void attachBlock(Block block) {
-        this.block = block;
+    public void attachBlock() {
         this.status = CardStatus.BLOCKED;
     }
 

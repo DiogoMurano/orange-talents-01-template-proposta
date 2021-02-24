@@ -74,14 +74,12 @@ public class BlockCardController {
         Requester requester = new Requester(ipAddress, userAgent);
         Block block = new Block(requester, card);
 
-        card.attachBlock(block);
+        card.attachBlock();
 
         blockRepository.save(block);
         cardRepository.save(card);
 
-        URI location = builder.path("/api/v1/card/{cardId}/block}")
-                .buildAndExpand(card.getExternalId().toString(), block.getExternalId()).toUri();
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok().build();
     }
 
 }
