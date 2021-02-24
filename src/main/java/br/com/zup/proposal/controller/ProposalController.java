@@ -44,6 +44,7 @@ public class ProposalController {
 
         if (card != null) {
             builder.card(CardResponse.builder()
+                    .id(card.getExternalId())
                     .cardNumber(card.getBlinkCardNumber())
                     .createdAt(card.getCreatedAt())
                     .build());

@@ -3,8 +3,12 @@ package br.com.zup.proposal.controller.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class CardResponse {
+
+    @JsonProperty
+    private final UUID id;
 
     @JsonProperty
     private final String cardNumber;
@@ -12,7 +16,8 @@ public class CardResponse {
     @JsonProperty
     private final LocalDateTime createdAt;
 
-    public CardResponse(String cardNumber, LocalDateTime createdAt) {
+    public CardResponse(UUID id, String cardNumber, LocalDateTime createdAt) {
+        this.id = id;
         this.cardNumber = cardNumber;
         this.createdAt = createdAt;
     }
@@ -23,8 +28,14 @@ public class CardResponse {
 
     public static class CardResponseBuilder {
 
+        private UUID id;
         private String cardNumber;
         private LocalDateTime createdAt;
+
+        public CardResponseBuilder id(UUID id) {
+            this.id = id;
+            return this;
+        }
 
         public CardResponseBuilder cardNumber(String cardNumber) {
             this.cardNumber = cardNumber;
@@ -37,7 +48,7 @@ public class CardResponse {
         }
 
         public CardResponse build() {
-            return new CardResponse(cardNumber, createdAt);
+            return new CardResponse(id, cardNumber, createdAt);
         }
 
     }

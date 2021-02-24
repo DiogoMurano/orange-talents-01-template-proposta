@@ -1,7 +1,6 @@
 package br.com.zup.proposal.scheduler;
 
-import br.com.zup.proposal.client.CardCreationClient;
-import br.com.zup.proposal.client.request.CreateCardRequest;
+import br.com.zup.proposal.client.CardClient;
 import br.com.zup.proposal.client.response.NewCardResponse;
 import br.com.zup.proposal.model.Card;
 import br.com.zup.proposal.model.Proposal;
@@ -16,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.text.MessageFormat;
 import java.util.List;
 
 @Component
@@ -24,16 +22,16 @@ public class ConsultCardScheduler {
 
     private final ProposalRepository proposalRepository;
     private final CardRepository cardRepository;
-    private final CardCreationClient cardCreationClient;
+    private final CardClient cardClient;
 
     private static final Logger logger = LoggerFactory.getLogger(ConsultCardScheduler.class);
 
     @Autowired
     public ConsultCardScheduler(ProposalRepository proposalRepository, CardRepository cardRepository,
-                                CardCreationClient cardCreationClient) {
+                                CardClient cardClient) {
         this.proposalRepository = proposalRepository;
         this.cardRepository = cardRepository;
-        this.cardCreationClient = cardCreationClient;
+        this.cardClient = cardClient;
     }
 
     @Scheduled(fixedDelayString = "${proposal.consult-card.delay}")
@@ -43,7 +41,7 @@ public class ConsultCardScheduler {
 
         for (Proposal proposal : proposals) {
             try {
-                NewCardResponse consult = cardCreationClient.consult(proposal.getExternalIdToString());
+                NewCardResponse consult = cardClient.consult(proposal.getExternalIdToString());
                 Card card = new Card(consult.getId(), consult.getCreatedAt(), proposal);
                 cardRepository.save(card);
 

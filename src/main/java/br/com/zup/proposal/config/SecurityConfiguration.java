@@ -17,9 +17,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(GET, "/api/v1/proposal/**").hasAuthority("SCOPE_proposal:read")
-                .antMatchers(GET, "/api/v1/card/**").hasAuthority("SCOPE_cartoes:read")
+                .antMatchers(GET, "/api/v1/card/**").hasAuthority("SCOPE_proposal:read")
                 .antMatchers(POST, "/api/v1/proposal/**").hasAuthority("SCOPE_proposal:write")
-                .antMatchers(POST, "/api/v1/card/**").hasAuthority("SCOPE_cartoes:write")
+                .antMatchers(POST, "/api/v1/card/**").hasAuthority("SCOPE_proposal:write")
                 .anyRequest().authenticated()
                 .and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);

@@ -1,5 +1,7 @@
 package br.com.zup.proposal.model;
 
+import br.com.zup.proposal.model.enums.CardStatus;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -31,6 +33,13 @@ public class Card {
     @NotNull
     @OneToMany
     private final Set<Biometry> biometrics = Collections.emptySet();
+
+    @OneToOne
+    private Block block;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private CardStatus status = CardStatus.WORKING;
 
     public Card(String number, LocalDateTime createdAt, Proposal proposal) {
         this.number = number;
@@ -68,5 +77,14 @@ public class Card {
 
     public String getBlinkCardNumber() {
         return "****.****.****." + getNumber().substring(getNumber().length() - 4);
+    }
+
+    public void attachBlock(Block block) {
+        this.block = block;
+        this.status = CardStatus.BLOCKED;
+    }
+
+    public boolean isBlocked() {
+        return this.status == CardStatus.BLOCKED;
     }
 }
