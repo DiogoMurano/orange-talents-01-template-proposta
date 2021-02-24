@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BlockCardRequest {
 
-    @JsonProperty
+    @JsonProperty("sistemaResponsavel")
     private final String responsibleSystem;
 
     public BlockCardRequest(String responsibleSystem) {
