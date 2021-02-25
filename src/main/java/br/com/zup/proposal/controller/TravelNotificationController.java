@@ -9,7 +9,7 @@ import br.com.zup.proposal.model.Requester;
 import br.com.zup.proposal.model.TravelNotification;
 import br.com.zup.proposal.repository.CardRepository;
 import br.com.zup.proposal.repository.TravelNotificationRepository;
-import br.com.zup.proposal.shared.ClientHostResolver;
+import br.com.zup.proposal.shared.client.ClientHostResolver;
 import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

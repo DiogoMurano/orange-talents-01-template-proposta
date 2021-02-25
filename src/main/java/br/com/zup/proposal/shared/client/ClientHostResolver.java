@@ -1,4 +1,4 @@
-package br.com.zup.proposal.shared;
+package br.com.zup.proposal.shared.client;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;

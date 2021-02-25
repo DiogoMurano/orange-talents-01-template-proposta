@@ -1,6 +1,7 @@
 package br.com.zup.proposal.model;
 
 import br.com.zup.proposal.model.enums.ProposalStatus;
+import br.com.zup.proposal.shared.crypto.CryptoConverter;
 import br.com.zup.proposal.validation.Document;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Proposal {
 
     @NotBlank
     @Document
+    @Convert(converter = CryptoConverter.class)
     private String document;
 
     @NotBlank
