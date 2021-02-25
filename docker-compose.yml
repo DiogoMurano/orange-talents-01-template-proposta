@@ -136,16 +136,26 @@ services:
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
 
-  #  propostas:
-  #    image: 'diogomurano/propostas'
-  #    ports:
-  #      - 8080:8080
-  #    environment:
-  #      DATABASE_URL: "jdbc:postgresql://propostas_postgres:5432/proposal"
-  #      FINANCIAL_ANALYSIS_URL: "http://analise:9999"
-  #      CARD_CREATION_URL: "http://contas:8888"
-  #    depends_on:
-  #      - propostas_postgres
+  propostas:
+    image: 'diogomurano/propostas'
+    ports:
+      - 8080:8080
+    depends_on:
+      - propostas_postgres
+      - analise
+      - contas
+      - keycloak
+    environment:
+      DATABASE_URL: "jdbc:postgresql://propostas_postgres:5432/proposal"
+      FINANCIAL_ANALYSIS_URL: "http://analise:9999"
+      CARD_CREATION_URL: "http://contas:8888"
+      KEYCLOAK_ISSUER_URI: "http://keycloak:8080/auth/realms/nosso-cartao"
+      KEYCLOAK_JWK_URI: "http://keycloak:8080/auth/realms/nosso-cartao/protocol/openid-connect/certs"
+      APPLICATION_NAME: "proposal-api"
+      AMBIENT: "prod"
+      JAEGER_ENABLED: true
+      JAEGER_SAMPLER: 1
+      JAEGER_ENDPOINT: "http://jaeger:14268/api/traces"
 
   propostas_postgres:
     image: 'postgres:alpine'
